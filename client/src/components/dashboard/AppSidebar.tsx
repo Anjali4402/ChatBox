@@ -36,7 +36,8 @@ const AppSidebar = ({ selectedUser, setSelectedUser }) => {
           <div 
         //   className="flex items-center gap-2" 
           >
-            <img src={assets.logo} alt="logo" className="max-w-40 h-fit" />
+            {/* <img src={assets.logo} alt="logo" className="max-w-40 h-fit" /> */}
+            <h1 className="text-white font-bold uppercase" >Chat</h1>
           </div>
 
             {/* dropdown to show profile and logout */}
