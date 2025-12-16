@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -19,10 +19,12 @@ import {userDummyData} from '../../assets/assets'
 import { useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
+import { AuthContext } from "@/context/AuthContext";
 // import proig from '../../assets/asets'
 
 const AppSidebar = ({ selectedUser, setSelectedUser }) => {
   const navigate = useNavigate();
+      const {logout} = useContext(AuthContext);
 
   return (
     <Sidebar
@@ -51,10 +53,14 @@ const AppSidebar = ({ selectedUser, setSelectedUser }) => {
                   onClick={() => {
                     navigate("/profile");
                   }}
+                  className="cursor-pointer"
                 >
-                  Profile
+                  Edit Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem>Logout</DropdownMenuItem>
+                <DropdownMenuItem
+                onClick={logout}
+                className="cursor-pointer"
+                >Logout</DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>

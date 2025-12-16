@@ -1,20 +1,25 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import assets from "../assets/assets";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "@/context/AuthContext";
 
 const ProfilePage = () => {
+  const { authUser, updateProfile } = useContext(AuthContext);
+
+  const [selectedImg, setSelectedImg] = useState("");
+
+  console.log(authUser);
+
   const [userDetails, setUserDetails] = useState({
-    fullName: "",
-    bio: "",
+    fullName: authUser?.fullName,
+    bio: authUser?.bio,
   });
 
   const navigate = useNavigate();
-
-  const [selectedImg, setSelectedImg] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,13 +32,35 @@ const ProfilePage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // alert("submit data");
     console.log(userDetails);
-    navigate("/")
+    console.log(selectedImg);
 
+    // if not uploaded the image
+    if (!selectedImg) {
+      await updateProfile({
+        fullName: userDetails?.fullName,
+        bio: userDetails?.bio,
+      });
+      navigate("/");
+      return;
+    }
 
+    // First convert image to base64 then use.
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedImg);
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      await updateProfile({
+        profilePic: base64Image,
+        fullName: userDetails?.fullName,
+        bio: userDetails.bio,
+      });
+
+      navigate("/");
+    };
   };
 
   const handleUpload = (e) => {
@@ -68,7 +95,9 @@ const ProfilePage = () => {
                   handleUpload(e);
                 }}
               />
-              <label htmlFor="image">Upload profile image</label>
+              <label htmlFor="image" className="cursor-pointer">
+                Upload profile image
+              </label>
             </div>
 
             <div className="flex flex-col gap-6">
@@ -110,7 +139,14 @@ const ProfilePage = () => {
             </Button>
           </form>
 
-          <img src={assets?.logo_icon} alt="logo" className="max-h-32" />
+          <img
+            // src={assets?.logo_icon}
+            src={
+              authUser?.profilePic ? authUser?.profilePic : assets?.logo_icon
+            }
+            alt="logo"
+            className="max-h-32 rounded-full"
+          />
         </CardContent>
       </Card>
     </div>
