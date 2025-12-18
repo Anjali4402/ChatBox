@@ -36,7 +36,7 @@ export const getMessages = async (req, res) => {
     const { id: selectedUserId } = req.params;
     const myId = req.user._id;
 
-    const filteredUsers = await User.find({ _id: { $ne: userId } }).select(
+    const filteredUsers = await User.find({ _id: { $ne: myId } }).select(
       "-password"
     );
 
