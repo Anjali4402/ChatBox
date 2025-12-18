@@ -1,12 +1,27 @@
 import AppSidebar from "@/components/dashboard/AppSidebar";
 import ChatContainer from "@/components/dashboard/ChatContainer";
 import RightSidebar from "@/components/dashboard/RightSidebar";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { useState } from "react";
+import { ChatContext } from "@/context/ChatContext";
+import { useContext, useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
+  // const [selectedUser, setSelectedUser] = useState(null);
+
+  const {getUsers ,selectedUser, setSelectedUser,getMessages } = useContext(ChatContext);
+
+  const [showdetails, setShowDetails] = useState(false);
+
+
+    useEffect(()=>{
+    if(selectedUser){
+      getMessages();
+    }
+
+  },[selectedUser])
+
+
 
   return (
     <div className="h-screen flex">
@@ -14,8 +29,8 @@ const HomePage = () => {
         <div className="w-[400px]">
           {/* <h1>Take is later form but now here we are here hereere ere</h1> */}
           <AppSidebar
-            selectedUser={selectedUser}
-            setSelectedUser={setSelectedUser}
+            // selectedUser={selectedUser}
+            // setSelectedUser={setSelectedUser}
           />
         </div>
         {/* <AppSidebar
@@ -27,11 +42,13 @@ const HomePage = () => {
           <ChatContainer
             selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
+            setShowDetails={setShowDetails}
           />
           {
-            selectedUser &&
+            selectedUser && showdetails &&
           <RightSidebar
           selectedUser ={selectedUser}
+          setShowDetails={setShowDetails}
            />
 }
         </div>
